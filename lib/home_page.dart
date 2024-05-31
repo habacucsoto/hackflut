@@ -56,9 +56,14 @@ class HomePage extends StatelessWidget {
               final link = links[index];
               final username = link['postedBy']?['username'] ?? 'Anonymous'; // Provide default value
 
+              // Check if the link is a valid URL from Firebase Storage
+              bool isFirebaseStorageLink = link['link'] != null && link['link'].startsWith('https://firebasestorage.googleapis.com');
+
               return ListTile(
                 title: Text(link['answer'] ?? ''),
-                subtitle: Text(link['link'] ?? ''),
+                subtitle: isFirebaseStorageLink
+                    ? Image.network(link['link'])
+                    : Text(link['link'] ?? ''), // Render image if link is a valid Firebase Storage URL
                 trailing: Text(username),
               );
             },
